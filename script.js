@@ -1599,3 +1599,73 @@
       currentQuestions = shuffleArray([...questions]);
       showQuestion(currentIndex);
     };
+    document.addEventListener('contextmenu', (e) => e.preventDefault());
+
+
+    // إذا فتح المستخدم أدوات المطور، يتم إغلاق الصفحة
+setInterval(() => {
+  if (window.outerWidth - window.innerWidth > 200 || 
+      window.outerHeight - window.innerHeight > 200) {
+    document.body.innerHTML = "<h1>تم الكشف عن محاولة اختراق!</h1>";
+    window.location.href = "about:blank";
+  }
+}, 1000);
+// كود حماية من سرقة الأكواد وفحص الصفحة
+document.addEventListener('contextmenu', function(e) {
+  e.preventDefault();
+  showWarning();
+});
+
+document.addEventListener('keydown', function(e) {
+  // منع Ctrl+U, Ctrl+Shift+I, F12, Ctrl+Shift+J, Ctrl+Shift+C
+  if (e.ctrlKey && e.keyCode === 85 || 
+      e.ctrlKey && e.shiftKey && e.keyCode === 73 || 
+      e.keyCode === 123 ||
+      e.ctrlKey && e.shiftKey && e.keyCode === 74 ||
+      e.ctrlKey && e.shiftKey && e.keyCode === 67) {
+      e.preventDefault();
+      showWarning();
+  }
+});
+
+function showWarning() {
+  // إنشاء عنصر الرسالة التحذيرية
+  const warningDiv = document.createElement('div');
+  warningDiv.style.position = 'fixed';
+  warningDiv.style.top = '50%';
+  warningDiv.style.left = '50%';
+  warningDiv.style.transform = 'translate(-50%, -50%)';
+  warningDiv.style.backgroundColor = '#ff3333';
+  warningDiv.style.color = 'white';
+  warningDiv.style.padding = '20px';
+  warningDiv.style.borderRadius = '10px';
+  warningDiv.style.boxShadow = '0 0 20px rgba(0,0,0,0.5)';
+  warningDiv.style.zIndex = '99999';
+  warningDiv.style.textAlign = 'center';
+  warningDiv.style.maxWidth = '80%';
+  warningDiv.style.width = '400px';
+  warningDiv.innerHTML = `
+      <h3 style="margin-top:0;">⚠️ تحذير أمني ⚠️</h3>
+      <p>ممنوع محاولة فحص أو سرقة أكواد هذا الموقع!</p>
+      <p>سيتم الإبلاغ عن أي محاولة اختراق.</p>
+      <button onclick="this.parentNode.remove()" style="
+          background: white;
+          color: #ff3333;
+          border: none;
+          padding: 8px 15px;
+          border-radius: 5px;
+          cursor: pointer;
+          margin-top: 10px;
+          font-weight: bold;
+      ">حسناً، فهمت</button>
+  `;
+  
+  document.body.appendChild(warningDiv);
+  
+  // إزالة الرسالة بعد 5 ثواني تلقائياً
+  setTimeout(() => {
+      if (warningDiv.parentNode) {
+          warningDiv.remove();
+      }
+  }, 5000);
+}
